@@ -13,7 +13,7 @@
 // Accounts array stores all the account objects created by the program
 Account accounts[MAX_ACCOUNTS];
 int num_accounts = 0; //Number of accounts currently stored in the accounts array
-char filepath[] = "C:\\Users\\TOSHIBA\\Documents\\2ND SEM\\INPR\\BankingSystem-Justin-code-Updatedpasaupdated\\x64\\Debug\\accounts.csv"; //number of accounts currently stored in the accounts array
+char filepath[] = "../accounts.csv"; //number of accounts currently stored in the accounts array
 
 // To change the color of text in the console output
 void color(int bg, int ft) {
@@ -134,7 +134,7 @@ void save_accounts(Account accounts[], int num_accounts, const char* filename) {
 	}
 
 	// Write header row
-	//fprintf(fp, "Account No., Name, Gender, Contact No., Address, Balance\n");
+	fprintf(fp, "Account No., Name, Gender, Contact No., Address, Balance\n");
 
 	// Write account information to the file
 	for (int i = 0; i < num_accounts; i++) {
@@ -162,7 +162,7 @@ int load_accounts(Account accounts[]) {
 
 	// Declare variables to store the current line and the number of accounts loaded
 	char line[MAX_LINE_LENGTH];
-	int num_accounts = 0;
+	int num_accounts = 0, i = 0;
 
 	errno_t error = fopen_s(&fp, filepath, "r");
 
@@ -175,6 +175,13 @@ int load_accounts(Account accounts[]) {
 
 	// Loop through each line in the file
 	while (fgets(line, MAX_LINE_LENGTH, fp) != NULL) {
+		// If file pointer is at the first line
+		// Where the file headers are placed
+		// We will skip it.
+		if (i == 0) {
+			continue;
+		}
+
 		// Split the line into tokens
 		char* next_token;
 		char* token = strtok_s(line, ",", &next_token);
